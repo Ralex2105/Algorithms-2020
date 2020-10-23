@@ -97,8 +97,22 @@ public class JavaAlgorithms {
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
      */
-    static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+    static public String longestCommonSubstring(String first, String second) {
+        int max = 0, variable = 0;
+        if (first.equals(second)) return first;
+        if (first.equals("") || second.equals("")) return "";
+        int[][] matrix = new int[first.length() + 1][second.length() + 1];
+        for (int i = 1; i <= first.length(); i++) {
+            for (int j = 1; j <= second.length(); j++) {
+                if (first.charAt(i - 1) == second.charAt(j - 1))
+                    matrix[i][j] = matrix[i - 1][j - 1] + 1;
+                if (max < matrix[i][j]) {
+                    max = matrix[i][j];
+                    variable = i - 1;
+                }
+            }
+        }
+        return first.substring(variable + 1 - max, variable + 1);
     }
 
     /**
@@ -112,6 +126,16 @@ public class JavaAlgorithms {
      * Единица простым числом не считается.
      */
     static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+        if (limit <= 1) return 0;
+        int result = 0;
+        for (int i = 2; i <= limit; i++) {
+            result++;
+            for (int j = 2; j * j <= i; j++)
+                if (i % j == 0) {
+                    result--;
+                    break;
+                }
+        }
+        return result;
     }
 }

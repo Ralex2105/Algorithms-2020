@@ -2,6 +2,9 @@ package lesson1;
 
 import kotlin.NotImplementedError;
 
+import java.io.*;
+import java.util.*;
+
 @SuppressWarnings("unused")
 public class JavaTasks {
     /**
@@ -99,7 +102,25 @@ public class JavaTasks {
      * 121.3
      */
     static public void sortTemperatures(String inputName, String outputName) {
-        throw new NotImplementedError();
+        int min = 2730;
+        int limit = 5000 + min;
+        ArrayList<Integer> list = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputName));
+             FileWriter writer = new FileWriter(outputName)) {
+            String variable;
+            while ((variable = reader.readLine()) != null)
+                list.add(Integer.parseInt(variable.replace(".", "")) + min);
+            int[] array = new int[list.size()];
+            for(int i = 0; i < list.size(); i++) array[i] = list.get(i);
+            // O(n)
+            array = Sorts.countingSort(array, limit);
+            for (double i : array) {
+                i =  (i - min) / 10;
+                writer.write(i + "\n");
+            }
+        } catch (IOException e) {
+            throw new NotImplementedError();
+        }
     }
 
     /**
@@ -132,7 +153,36 @@ public class JavaTasks {
      * 2
      */
     static public void sortSequence(String inputName, String outputName) {
-        throw new NotImplementedError();
+        Map<Integer, Integer> map = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputName));
+             Writer writer = new FileWriter(outputName)) {
+            String variable;
+            while ((variable = reader.readLine()) != null)
+                list.add(Integer.parseInt(variable));
+            for (int j : list) {
+                if (!map.containsKey(j)) {
+                    map.put(j, 1);
+                } else {
+                    map.put(j, map.get(j) + 1);
+                }
+            }
+            //O(n)
+            int maximum = Collections.max(map.values());
+            int last = 0;
+            for (int i : list) {
+                if (map.get(i) == maximum)
+                    if (last == 0 || last > i) last = i;
+            }
+            for (int i : list)
+                if (i != last)
+                    writer.write(i + "\n");
+            for (int i = 0; i < maximum; i++)
+                writer.write(last + "\n");
+        } catch (IOException e) {
+            throw new NotImplementedError();
+        }
+
     }
 
     /**
