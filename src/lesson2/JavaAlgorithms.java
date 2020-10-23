@@ -96,6 +96,9 @@ public class JavaAlgorithms {
      * При сравнении подстрок, регистр символов *имеет* значение.
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
+     *
+     * Время - first.length() * second.length()
+     * Память - first.length() * second.length()
      */
     static public String longestCommonSubstring(String first, String second) {
         int max = 0, variable = 0;
@@ -124,6 +127,9 @@ public class JavaAlgorithms {
      *
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
+     *
+     * Время - O(N^(3/2)
+     * Память - O(1)
      */
     static public int calcPrimesNumber(int limit) {
         if (limit <= 1) return 0;

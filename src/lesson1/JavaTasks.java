@@ -100,6 +100,9 @@ public class JavaTasks {
      * 24.7
      * 99.5
      * 121.3
+     *
+     * Время - O(N)
+     * Память - O(N)
      */
     static public void sortTemperatures(String inputName, String outputName) {
         int min = 2730;
@@ -151,6 +154,9 @@ public class JavaTasks {
      * 2
      * 2
      * 2
+     * 
+     * Время - O(N)
+     * Память - O(N)
      */
     static public void sortSequence(String inputName, String outputName) {
         Map<Integer, Integer> map = new HashMap<>();
