@@ -104,7 +104,7 @@ public class JavaTasks {
      * Время - O(N)
      * Память - O(N)
      */
-    static public void sortTemperatures(String inputName, String outputName) {
+    static public void sortTemperatures(String inputName, String outputName) throws IOException {
         int min = 2730;
         int limit = 5000 + min;
         ArrayList<Integer> list = new ArrayList<>();
@@ -121,8 +121,6 @@ public class JavaTasks {
                 i =  (i - min) / 10;
                 writer.write(i + "\n");
             }
-        } catch (IOException e) {
-            throw new NotImplementedError();
         }
     }
 
@@ -154,7 +152,7 @@ public class JavaTasks {
      * 2
      * 2
      * 2
-     * 
+     *
      * Время - O(N)
      * Память - O(N)
      */

@@ -134,8 +134,7 @@ public class JavaAlgorithms {
     static public int calcPrimesNumber(int limit) {
         if (limit <= 1) return 0;
         int result = 0;
-        for (int i = 2; i <= limit; i++) {
-            result++;
+        for (int i = 2; i <= limit; i++, result++) {
             for (int j = 2; j * j <= i; j++)
                 if (i % j == 0) {
                     result--;
