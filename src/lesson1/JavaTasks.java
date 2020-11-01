@@ -107,7 +107,7 @@ public class JavaTasks {
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
         int min = 2730;
         int limit = 5000 + min;
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(inputName));
              FileWriter writer = new FileWriter(outputName)) {
             String variable;
