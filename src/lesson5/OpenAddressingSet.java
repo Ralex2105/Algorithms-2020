@@ -1,6 +1,5 @@
 package lesson5;
 
-import kotlin.NotImplementedError;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.AbstractSet;
@@ -8,6 +7,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class OpenAddressingSet<T> extends AbstractSet<T> {
+
+    private Object removed = new Object();
 
     private final int bits;
 
@@ -67,7 +68,7 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
         int startingIndex = startingIndex(t);
         int index = startingIndex;
         Object current = storage[index];
-        while (current != null) {
+        while (current != null && current != removed) {
             if (current.equals(t)) {
                 return false;
             }
@@ -93,9 +94,21 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
      *
      * Средняя
      */
+
+    //Трудоемкость: O(N)
+    //Память: O(1)
     @Override
     public boolean remove(Object o) {
-        return super.remove(o);
+        var index = startingIndex(o);
+        while (storage[index] != null) {
+            if (storage[index].equals(o)) {
+                storage[index] = removed;
+                size--;
+                return true;
+            }
+            index++;
+        }
+        return false;
     }
 
     /**
@@ -111,7 +124,44 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
     @NotNull
     @Override
     public Iterator<T> iterator() {
-        // TODO
-        throw new NotImplementedError();
+        return new OpenAddressingSetIterator();
+    }
+
+    public class OpenAddressingSetIterator implements Iterator<T> {
+        int index = 0;
+        int count = 0;
+        Object actual = null;
+
+        //Трудоемкость: O(1)
+        //Память: O(1)
+        @Override
+        public boolean hasNext() {
+            return count < size;
+        }
+
+        //Трудоемкость: O(N)
+        //Память: O(1)
+        @Override
+        public T next() {
+            if (!hasNext()) throw new IllegalStateException();
+            while (storage[index] == null || storage[index] == removed) {
+                index++;
+            }
+            T element = (T) storage[index];
+            actual = storage[index];
+            index++;
+            count++;
+            return element;
+        }
+
+        //Трудоемкость: O(1)
+        //Память: O(1)
+        @Override
+        public void remove() {
+            if (actual == null || actual == removed) throw new IllegalStateException();
+            storage[index - 1] = removed;
+            size--;
+            count--;
+        }
     }
 }

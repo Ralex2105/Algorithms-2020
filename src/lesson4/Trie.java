@@ -1,7 +1,8 @@
 package lesson4;
 
 import java.util.*;
-import kotlin.NotImplementedError;
+
+import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -92,8 +93,54 @@ public class Trie extends AbstractSet<String> implements Set<String> {
     @NotNull
     @Override
     public Iterator<String> iterator() {
-        // TODO
-        throw new NotImplementedError();
+        return new TrieIterator();
     }
 
+    public class TrieIterator implements Iterator<String> {
+        private int index;
+        private String actual;
+        private final List<String> list = new ArrayList<>();
+
+        //Трудоемкость: O(N)
+        //Память: O(M)
+        //Где N - количество букв в дерево, M - количество слов в дереве
+        private TrieIterator() {
+            if (!root.children.isEmpty()) {
+                add(root, "");
+            }
+        }
+        private void add(Node root, String w) {
+            for (Map.Entry<Character, Node> pair : root.children.entrySet()) {
+                Character k = pair.getKey();
+                if (k == (char) 0) list.add(w);
+                else add(root.children.get(k), w + k);
+            }
+        }
+
+        //Трудоемкость: O(1)
+        //Память: O(1)
+        @Override
+        public boolean hasNext() {
+            return index < list.size();
+        }
+
+        //Трудоемкость: O(1)
+        //Память: O(1)
+        @Override
+        public String next() {
+            if (index >= list.size()) throw new NoSuchElementException();
+            actual = list.get(index);
+            index++;
+            return actual;
+        }
+
+        //Трудоемкость: O(1)
+        //Память: O(1)
+        @Override
+        public void remove() {
+            if (actual == null) throw new IllegalStateException();
+            Trie.this.remove(actual);
+            actual = null;
+        }
+    }
 }

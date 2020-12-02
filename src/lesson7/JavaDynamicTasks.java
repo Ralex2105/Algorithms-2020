@@ -2,6 +2,7 @@ package lesson7;
 
 import kotlin.NotImplementedError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -18,8 +19,37 @@ public class JavaDynamicTasks {
      * Если есть несколько самых длинных общих подпоследовательностей, вернуть любую из них.
      * При сравнении подстрок, регистр символов *имеет* значение.
      */
+
+    //Трудоемкость: O(first.lenght * second.lenght)
+    //Время: O(first.lenght * second.lenght)
     public static String longestCommonSubSequence(String first, String second) {
-        throw new NotImplementedError();
+        int[][] matrix = new int[first.length() + 1][second.length() + 1];
+        for (int height = 1; height < first.length() + 1; height++) {
+            for (int widght = 1; widght < second.length() + 1; widght++) {
+                if (first.charAt(height - 1) != second.charAt(widght - 1)) {
+                    matrix[height][widght] = Math.max(matrix[height - 1][widght], matrix[height][widght - 1]);
+                } else {
+                    matrix[height][widght] = matrix[height - 1][widght - 1] + 1;
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        int lengthF = first.length();
+        int lengthS = second.length();
+        while (lengthF != 0 && lengthS != 0) {
+            if (first.charAt(lengthF - 1) == second.charAt(lengthS - 1)) {
+                sb.insert(0, first.charAt(lengthF - 1));
+                lengthF--;
+                lengthS--;
+            } else {
+                if (matrix[lengthF - 1][lengthS] >= matrix[lengthF][lengthS - 1]) {
+                    lengthF--;
+                } else {
+                    lengthS--;
+                }
+            }
+        }
+        return sb.toString();
     }
 
     /**
@@ -34,8 +64,37 @@ public class JavaDynamicTasks {
      * то вернуть ту, в которой числа расположены раньше (приоритет имеют первые числа).
      * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
      */
+
+    //Трудоемкость: O(N * N)
+    //Время: O(N)
     public static List<Integer> longestIncreasingSubSequence(List<Integer> list) {
-        throw new NotImplementedError();
+        if (list.isEmpty()) return list;
+        List<Integer> result = new ArrayList<>();
+        List<Integer> previous = new ArrayList<>();
+        List<Integer> value = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            value.add(i,1);
+            previous.add(i, -1);
+            for (int j = 0; j < i; j++) {
+                if (list.get(j) < list.get(i) && value.get(j) + 1 > value.get(i)) {
+                    value.add(i, value.get(j) + 1);
+                    previous.set(i, j);
+                }
+            }
+        }
+        int index = 0;
+        int length = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (value.get(i) > length) {
+                index = i;
+                length = value.get(i);
+            }
+        }
+        while (index != -1) {
+            result.add(0, list.get(index));
+            index = previous.get(index);
+        }
+        return result;
     }
 
     /**
