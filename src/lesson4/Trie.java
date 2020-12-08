@@ -97,40 +97,38 @@ public class Trie extends AbstractSet<String> implements Set<String> {
     }
 
     public class TrieIterator implements Iterator<String> {
-        private int index;
         private String actual;
-        private final List<String> list = new ArrayList<>();
+        private final ArrayDeque<String> stack = new ArrayDeque<>();
 
         //Трудоемкость: O(N)
         //Память: O(M)
-        //Где N - количество букв в дерево, M - количество слов в дереве
+        //Где N - количество букв в дереве, M - количество букв в словах
         private TrieIterator() {
             if (!root.children.isEmpty()) {
                 add(root, "");
             }
         }
         private void add(Node root, String w) {
-            for (Map.Entry<Character, Node> pair : root.children.entrySet()) {
-                Character k = pair.getKey();
-                if (k == (char) 0) list.add(w);
-                else add(root.children.get(k), w + k);
-            }
+            if (root.children.containsKey((char) 0))
+                stack.add(w);
+            root.children.forEach((key, value) -> {
+                if (key != (char) 0) add(value, w + key);
+            });
         }
 
         //Трудоемкость: O(1)
         //Память: O(1)
         @Override
         public boolean hasNext() {
-            return index < list.size();
+            return !stack.isEmpty();
         }
 
         //Трудоемкость: O(1)
         //Память: O(1)
         @Override
         public String next() {
-            if (index >= list.size()) throw new NoSuchElementException();
-            actual = list.get(index);
-            index++;
+            if (stack.isEmpty()) throw new NoSuchElementException();
+            actual = stack.removeLast();
             return actual;
         }
 

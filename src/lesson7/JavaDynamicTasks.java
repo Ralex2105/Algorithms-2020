@@ -20,8 +20,8 @@ public class JavaDynamicTasks {
      * При сравнении подстрок, регистр символов *имеет* значение.
      */
 
-    //Трудоемкость: O(first.lenght * second.lenght)
-    //Время: O(first.lenght * second.lenght)
+    //Трудоемкость: O(first.length * second.length)
+    //Время: O(first.length * second.length)
     public static String longestCommonSubSequence(String first, String second) {
         int[][] matrix = new int[first.length() + 1][second.length() + 1];
         for (int height = 1; height < first.length() + 1; height++) {
